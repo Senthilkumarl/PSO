@@ -1,11 +1,9 @@
-
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar 20 21:21:09 2018
 
 @author: Senthilkumar Lakshmanan
 """
-
 import numpy as np
 from numpy.random import rand
 from random import random
@@ -21,7 +19,8 @@ from swarm import *
 
 def PSO(prob_prams, pso_prams):
     #================================Problem definition===========================================
-    nVar=prob_prams['nVar'] 
+    nVar=prob_prams['nVar']
+    varSize=[1,prob_prams['nVar']]    
     costFn=prob_prams['costFn']
     varMin=prob_prams['varMin']
     varMax=prob_prams['varMax']
@@ -35,9 +34,12 @@ def PSO(prob_prams, pso_prams):
     wdamp = pso_prams['wdamp'] #Damping ratio
     c1 =pso_prams['c1'];
     c2 = pso_prams['c2']  
-        
+    #Vmax = pso_prams['Vmax'];
+    
+    s = np.zeros(nVar)
+    
     #===========================================================================
-    #=================================Initialization==========================================
+     #=================================Initialization==========================================
     GlobalBest_Postion=[]
     GlobalBest_Cost= np.Infinity
     
@@ -64,25 +66,30 @@ def PSO(prob_prams, pso_prams):
         for i in range(nPop):    
             #Evaluate the cost function
             p[i].Cost = costFn(p[i].Position)
-            #Update particle best and Global best
+
+
             if p[i].updatePbest():
                 GlobalBest_Cost, GlobalBest_Postion = p[i].updateGbest(GlobalBest_Cost, GlobalBest_Postion)
 
             #Update Velocity
-            p[i].updateVelocity(GlobalBest_Postion,c1,c2,w,nVar)            
+            p[i].updateVelocity(GlobalBest_Postion,c1,c2,w,nVar)
             
-            #Update Position and Cost            
+            
+            #Update Position and Cost
+            
             p[i].Position =p[i].Position + p[i].Velocity;
             p[i].Position = tools.boundary(p[i].Position, varMin, varMax) 
             
 #           
         BestCosts[it] = GlobalBest_Cost
-        gbests[it] = (GlobalBest_Postion,GlobalBest_Cost)    
+        gbests[it] = (GlobalBest_Postion,GlobalBest_Cost)
+        
+        
         
         if pso_prams['showItr']:
             print("Iteration", it, 'Best cost', BestCosts[it] )
             
-        #Damping  Inertia Coefficient
+            #Damping  Inertia Coefficient
         w = w*wdamp
         #----------------------------------------------------------------------------------------------
     out_pso = {

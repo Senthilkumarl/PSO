@@ -1,2 +1,9 @@
 eclipse.preferences.version=1
+encoding/BPSO.py=utf-8
 encoding/BPSO_main.py=utf-8
+encoding/PSO.py=utf-8
+encoding/PSO_main.py=utf-8
+encoding/objFn.py=utf-8
+encoding/swarm.py=utf-8
+encoding/test.py=utf-8
+encoding/tools.py=utf-8
