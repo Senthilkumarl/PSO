@@ -10,14 +10,14 @@ import objFn
 from math import exp, pi, atan, tanh, sqrt, erf
 import matplotlib.pyplot as plt
 import tools
-
+import numpy as np
 from swarm import *
     
 
 def BPSO(prob_prams, pso_prams):
     #================================Problem definition===========================================
     nVar=prob_prams['nVar']
-    varSize=[1,prob_prams['nVar']]    
+    #varSize=[1,prob_prams['nVar']]    
     costFn=prob_prams['costFn']
     
     
@@ -134,8 +134,20 @@ if __name__=='__main__':
     
     #===========================================================================
     #===================================Parameters of PSO========================================
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+    transFnStr = [
+            r'$\frac{1}{1+e^{-2v}}$',
+            r'$\frac{1}{1+e^{-v}}$',
+            r'$\frac{1}{1+e^{-v/2}}$',
+            r'$\frac{1}{1+e^{-v/3}}$',
+            r'$\left|erf(\sqrt{\frac{\pi}{2}}v)\right|$',
+            r'$\left|tanh(v)\right|$',
+            r'$\left|\frac{v}{\sqrt{1+v^2}}\right|$',
+            r'$\left|\frac{2}{\pi}atan\left(\left(\frac{\pi}{2}\right)v\right)\right|$'
+            ]
     
-    for n in range(1,9):
+    for n in range(0,8):
         pso_prams = {
                       'MaxIt' : 200, # Maximum number of iteration
                         'nPop' : 30, # Number of particle 
@@ -159,12 +171,14 @@ if __name__=='__main__':
         saveVars(gbests)
         #     loadVars()
         #===========================================================================
+        print(transFnStr[n])
+        #line1, = plt.semilogy(BestCosts, label='TF'+ str(n+1) +': ' + transFnStr[n])
         
-        plt.semilogy(BestCosts)
-        
-        #plt.plot(BestCosts)
+        line1, = plt.plot(BestCosts, label='TF'+ str(n+1) +': ' + transFnStr[n])
         plt.xlabel('Iterations')
-        plt.ylabel('cost value')
+        plt.ylabel('Optimal cost')
+    from matplotlib.legend_handler import HandlerLine2D
+    plt.legend(handler_map={line1: HandlerLine2D(numpoints=8)}, loc=1, fontsize=12)
     plt.show()
 
     
